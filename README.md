@@ -1,178 +1,208 @@
 # Nuvora
 
-> Strengthen Your Body, Elevate Your Soul, Expand Your Mind.
+**Strengthen Your Body, Elevate Your Soul, Expand Your Mind.**
 
-Nuvora is an offline-first Flutter app (Android first) that brings three parts
-of daily life into one calm place:
+Nuvora is an offline-first Flutter app (Android first) for building a balanced
+daily routine across three areas of life, in one calm, consistent interface:
 
-- **Body**: workouts, water, fasting timer.
-- **Soul**: calculated prayer times, prayer tracking, streaks.
-- **Mind**: focus timer, subjects and syllabus, exams, spaced-repetition flashcards.
+| | Area | What you can do |
+| --- | --- | --- |
+| 🌿 | **Body** | guided no-equipment workouts, water tracking, fasting timer |
+| 🌙 | **Soul** | calculated prayer times, prayer tracking and streaks |
+| 📘 | **Mind** | focus timer, subjects and syllabus, exams, spaced-repetition flashcards |
 
-Around them sit a **daily planner**, a **habit calendar**, a private
+Around those sit a **daily planner**, a **habit calendar**, a private
 **journal**, **progress** (milestones, XP, weekly report), local **reminders**,
 **backup and restore**, and two clearly optional layers: **cloud sync** and an
-**AI assistant**.
+**AI assistant**. Everything core works with no internet and no account.
 
-> See "Status in one paragraph" below for what is verified and what is not.
+<p>
+  <img src="tool/screenshots/light_2_home.png" width="190" alt="Home dashboard" />
+  <img src="tool/screenshots/light_3_prayer.png" width="190" alt="Prayer times and tracking" />
+  <img src="tool/screenshots/light_8_planner.png" width="190" alt="Daily planner" />
+  <img src="tool/screenshots/dark_5_study.png" width="190" alt="Study (dark theme)" />
+</p>
 
-## Status in one paragraph
+*Screenshots are rendered from the real widgets with sample data (see
+`tool/screenshots_test.dart`), not captured from a phone.*
 
-All core tracking works with no internet and is covered by automated tests
-(unit, repository and widget tests on an in-memory database). Cloud sync,
-cloud accounts and the AI assistant are implemented and tested against
-in-memory or mocked servers, **but the backend has not been deployed or
-tested against a live Supabase project, and no AI provider has been called**.
-Notifications are planned and scheduled by tested code, but delivery has not
-been observed on a physical phone. Several features from the original
-specification are not built (Qibla, Quran tracker, dhikr counter, body
-measurements, workout set logging, app lock, and more; see the report).
+## Features
 
-## Requirements
+**Home**: greeting and date, a daily progress ring built from your real data
+(prayers, study minutes, workout, water), next prayer, one-tap +250 ml water,
+quick actions. The score is transparent and says it is not a measure of worth.
 
-| Item | Version used |
-| --- | --- |
-| Windows 10 or 11 | tested on Windows 10 Pro |
-| Flutter | 3.47.7 (stable), Dart 3.13.5 |
-| Android Studio | with Android SDK and the bundled JDK 17+ |
-| Git | any recent version |
+**Prayer**: times calculated on the device with a maintained library
+(`adhan_dart`), several calculation methods, standard or Hanafi Asr, city list
+or manual coordinates (no location permission needed), a live countdown to the
+next prayer, a five-prayer checklist (on time, late, missed, or not recorded),
+streaks and a 7-day summary. A prayer you have not recorded is never counted
+as missed.
 
-Costs: Flutter, Android Studio and the app itself are free. Optional services:
-a Supabase project (free tier is enough to try it), an AI provider account
-(pay per use, only if you enable the AI assistant), and a one-time Google Play
-developer fee (US$25) only if you publish to the Play Store.
+**Study**: Pomodoro-style focus and break timer that survives the app being
+closed (it stores timestamps, not a running countdown), subjects with
+prioritised topics and progress, exam countdowns, and flashcards with a
+documented spaced-repetition algorithm and full review history.
 
-## Windows setup
+**Fitness**: six original beginner workouts (full body, upper, lower, core,
+mobility, a short one) with a step-by-step player, work and rest timers, skip
+and previous, easier options, and history; water tracking with an adjustable
+goal; a fasting timer with a safety note.
 
-1. **Install Git** from <https://git-scm.com/download/win>.
-2. **Install Flutter.** Either follow <https://docs.flutter.dev/get-started/install/windows/mobile>
-   or, in PowerShell:
-   ```powershell
-   git clone https://github.com/flutter/flutter.git -b stable C:\src\flutter
-   ```
-   Add `C:\src\flutter\bin` to your `PATH`, then open a new terminal and run
-   `flutter --version`.
-3. **Install Android Studio** from <https://developer.android.com/studio>, open
-   it once, and install the Android SDK (SDK Platform and Command-line Tools)
-   from *Settings > Languages & Frameworks > Android SDK*.
-4. **Point Flutter at them** (adjust paths if yours differ):
+**Plan and progress**: an offline rule-based daily planner (prayer times, exams,
+topics, due cards, workout; no overlaps; your edits are kept), a habit
+calendar that separates *complete*, *partial*, *missed* and *nothing recorded*,
+a private daily reflection journal with search, milestone badges, XP and a
+weekly report.
+
+**Reminders**: independent, off-by-default reminders for prayer times, study,
+workout, water, reflection, flashcards and a weekly summary; quiet hours;
+generic notification text by default; permission requested only after an
+explanation.
+
+**Your data**: multiple isolated local profiles, a versioned JSON backup
+(secrets excluded) with safe restore, light/dark/system themes, English and
+Urdu strings.
+
+**Optional cloud sync** (your own Supabase project): per-category opt-in
+(journal and prayer data are private by default), last-writer-wins with
+documented rules, deletions that propagate, safe retries.
+
+**Optional AI assistant**: off until you turn it on; you choose which summaries
+it may see; your journal and name are never sent; replies are labelled
+"AI-generated", shown as drafts you review before saving, and a local offline
+suggestion is always available.
+
+## Status: what is verified and what is not
+
+Be aware of the difference between *tested here* and *proven in the field*:
+
+- **Tested with automated tests** (unit, database and widget tests on an
+  in-memory database): all core tracking, the algorithms, backup/restore,
+  migrations, the sync engine (simulating two devices), the reminder planner and
+  service, and the AI consent and data-minimisation rules.
+- **Tested only against fakes or mocked HTTP**: cloud sign-in, the Supabase
+  remote, the AI client, and notification scheduling. **The Supabase SQL,
+  row-level-security policies and both server functions have not been deployed
+  or run against a live project**, and **no AI provider has been called**.
+  Use the checklist in [docs/BACKEND.md](docs/BACKEND.md) before trusting them.
+- **Not observed on a physical phone**: notification delivery, the permission
+  prompt, sharing a backup file, picking a file to restore, and installing the
+  APK. A debug APK builds successfully.
+
+**Not built yet** (from the original plan): Qibla compass, Quran reading
+tracker, dhikr/tasbih counter, workout set/rep/weight logging, body
+measurements, linking topics to exams, local app lock, a screen to set the
+local recovery question, dashboard card customisation and editable score
+weights, monthly challenges, streak recovery, fasting reminders, an automatic
+location option, push notifications, iOS, and on-device integration tests.
+
+## Quick start
+
+Requirements: Windows 10/11, Git, Flutter 3.47.7 (stable) with Dart 3.13.5,
+Android Studio with the Android SDK.
+
+```powershell
+git clone https://github.com/muhammadyaseen2k03/nuvora.git
+cd nuvora
+flutter pub get
+flutter run                  # an emulator or a USB-connected phone
+```
+
+Generated code (`lib/data/database.g.dart`, `lib/l10n/gen/`) is in the repo. If
+you change a database table or a string, regenerate it:
+
+```powershell
+dart run build_runner build
+flutter gen-l10n
+```
+
+### Full Windows setup
+
+1. Install [Git](https://git-scm.com/download/win).
+2. Install Flutter: <https://docs.flutter.dev/get-started/install/windows/mobile>
+   (or `git clone https://github.com/flutter/flutter.git -b stable C:\src\flutter`
+   and add `C:\src\flutter\bin` to `PATH`).
+3. Install [Android Studio](https://developer.android.com/studio) and, in
+   *Settings > Languages & Frameworks > Android SDK*, the SDK Platform and
+   Command-line Tools.
+4. Point Flutter at them and accept licences:
    ```powershell
    flutter config --android-sdk "$env:LOCALAPPDATA\Android\Sdk"
    flutter config --jdk-dir "C:\Program Files\Android\Android Studio\jbr"
    flutter doctor --android-licenses
    flutter doctor
    ```
-   Fix anything `flutter doctor` flags for Android.
-5. **Get the project and its dependencies:**
-   ```powershell
-   cd path\to\nuvora
-   flutter pub get
-   dart run build_runner build      # generates the Drift database code
-   flutter gen-l10n                 # generates the localization classes
-   ```
-   The generated files (`lib/data/database.g.dart`, `lib/l10n/gen/`) are
-   included in the project, so this step is only needed after changing a table or a string.
+5. Emulator: Android Studio *Device Manager*, create and start a device.
+   Phone: enable *Developer options* and *USB debugging*, connect, and run
+   `flutter devices`.
 
-## Run on an emulator or a phone
+The first Android build downloads a lot (Gradle, plugins) and can take 10-20
+minutes on a slow connection. Later builds are much faster. If a build fails
+with a download timeout, run it again; it resumes from what was cached.
 
-- **Emulator:** in Android Studio open *Device Manager*, create a device with a
-  recent Android image, start it, then `flutter run`.
-- **Physical phone:** enable *Developer options* and *USB debugging*, connect
-  by USB, accept the prompt on the phone, check `flutter devices`, then
-  `flutter run -d <device id>`.
-- **Install a built APK:** `adb install -r build\app\outputs\flutter-apk\app-debug.apk`.
-
-The app starts with an onboarding flow that creates a local profile. No account
-is needed.
-
-## Quality checks
+## Check and build
 
 ```powershell
-flutter analyze        # static analysis; expected: No issues found
-flutter test           # unit, repository and widget tests
+flutter analyze                       # expected: No issues found
+flutter test                          # runs the automated tests
+flutter build apk --debug             # build\app\outputs\flutter-apk\app-debug.apk
+flutter build apk --release
+adb install -r build\app\outputs\flutter-apk\app-debug.apk
 ```
 
-Tests use an in-memory SQLite database, so they run without a device. A few
-test files simulate several devices against an in-memory sync server and use
-mocked HTTP.
+> **Release signing.** The release build is currently signed with the *debug*
+> key (see `android/app/build.gradle.kts`). That is fine for testing but not for
+> distribution. Create a keystore and configure `signingConfigs.release`
+> (<https://docs.flutter.dev/deployment/android#sign-the-app>) before publishing,
+> and keep the keystore and `key.properties` out of version control (they are
+> git-ignored).
 
-To regenerate the screenshots used in reviews (renders real widgets, not a
-device):
+## Optional: cloud sync and AI
 
-```powershell
-flutter test tool/screenshots_test.dart --update-goldens   # writes tool/screenshots/
-```
+Both are **off** unless you build with your own Supabase project's URL and
+**anon (public)** key. Without them the cloud and AI features say they are not
+set up and everything else works.
 
-## Build an APK
-
-```powershell
-flutter build apk --debug                       # build\app\outputs\flutter-apk\app-debug.apk
-flutter build apk --release                     # app-release.apk
-flutter build appbundle --release               # for the Play Store
-```
-
-**Release signing.** `flutter build apk --release` currently signs with the
-*debug* key (see `android/app/build.gradle.kts`), which is fine for testing
-but **not for distribution**. Before publishing, create a keystore and
-configure `signingConfigs.release` following
-<https://docs.flutter.dev/deployment/android#sign-the-app>. Keep the keystore
-and `key.properties` out of version control.
-
-To build with cloud features enabled, pass your configuration (see
-[.env.example](.env.example)):
-
-```powershell
-flutter build apk --release --dart-define-from-file=.env
-```
-
-## Optional: cloud sync and the AI assistant
-
-Both are **off** unless you configure a Supabase project and supply its URL
-and anon key at build time. Without them the app hides cloud sign-in and the
-AI features say they are not set up, and everything else works.
-
-1. Create a project at <https://supabase.com>.
-2. Authentication > Providers: enable *Email*. Keep *Confirm email* on so
-   accounts must be verified. Set the site URL / redirect for password reset.
-3. Install the Supabase CLI, `supabase login`, `supabase link --project-ref <ref>`.
-4. Apply the database schema and policies:
-   ```powershell
-   supabase db push        # applies backend/supabase/migrations/*.sql
-   ```
-5. Deploy the server functions and set their secrets (server side only):
+1. Create a project at <https://supabase.com>; enable Email auth and keep
+   email confirmation on.
+2. `supabase link --project-ref <ref>` then `supabase db push` (applies
+   `backend/supabase/migrations/`).
+3. Deploy the functions and set secrets **on the server only**:
    ```powershell
    supabase functions deploy delete-account
    supabase functions deploy ai
    supabase secrets set AI_PROVIDER_API_KEY=... AI_MODEL=... AI_DAILY_LIMIT=30
    ```
-6. Run the database tests, then verify isolation yourself (checklist in
-   [docs/BACKEND.md](docs/BACKEND.md)):
+4. Copy `.env.example` to `.env`, fill in `SUPABASE_URL` and `SUPABASE_ANON_KEY`,
+   then:
    ```powershell
-   supabase test db
+   flutter run --dart-define-from-file=.env
+   flutter build apk --release --dart-define-from-file=.env
    ```
-7. Build the app with `--dart-define-from-file=.env`.
 
-**Important:** the SQL, the RLS policies and both functions were written and
-reviewed but **not run against a live project by the author**. Treat
-[docs/BACKEND.md](docs/BACKEND.md) as your acceptance checklist before trusting
-them with real data.
+Never put a service-role key or an AI provider key in the app. A test scans the
+source for them.
 
-## Permissions the app asks for
+**Costs:** Flutter, Android Studio and the app are free. A Supabase project has
+a free tier; the AI provider charges per use (only if you enable the assistant);
+publishing on Google Play has a one-time US$25 developer fee.
+
+## Permissions
 
 | Permission | When | Why |
 | --- | --- | --- |
-| Notifications (Android 13+) | only when you press "Allow notifications" on the Reminders screen, after an explanation | prayer, study, workout, water, reflection and weekly-summary reminders |
-| Boot completed | declared, no prompt | restores scheduled reminders after a restart |
-| Internet | implicit | only used if you enable cloud sync or the AI assistant |
+| Notifications (Android 13+) | only when you press "Allow notifications", after an explanation | reminders |
+| Receive boot completed | declared, no prompt | restore reminders after a restart |
+| Internet | only if you enable cloud sync or the AI assistant | those features |
 
-Location is **not** requested: choose a city or enter coordinates for prayer
-times. Exact-alarm permission is not requested; reminders may arrive a few
-minutes late on some phones.
+Location is not requested; exact-alarm permission is not requested, so some
+reminders may arrive a few minutes late.
 
 ## Documentation
 
-- [docs/RULES.md](docs/RULES.md): the exact rules for streaks, daily score, spaced repetition, planner, notifications and achievements.
-- [docs/SYNC.md](docs/SYNC.md): offline-first sync design and conflict rules.
+- [docs/RULES.md](docs/RULES.md): the exact rules for streaks, the daily score, spaced repetition, the planner, reminders and achievements.
+- [docs/SYNC.md](docs/SYNC.md): sync design and conflict rules.
 - [docs/BACKEND.md](docs/BACKEND.md): API contracts, setup and the verification checklist.
 - [docs/PRIVACY.md](docs/PRIVACY.md): what stays local, what can be uploaded, what is and is not encrypted.
 
@@ -180,37 +210,44 @@ minutes late on some phones.
 
 ```
 lib/
-  app/            entry, router, providers (Riverpod), app shell
-  core/           theme and design tokens, shared widgets
-  data/           Drift database, migrations, table descriptions
-  l10n/           English and Urdu strings (ARB)
+  app/             entry, router, Riverpod providers
+  core/            theme and design tokens
+  data/            Drift (SQLite) database, migrations, table descriptions
+  l10n/            English and Urdu strings
   features/
-    auth/         local profiles, onboarding, recovery verifier, cloud auth client
-    home/         dashboard, daily score
-    prayer/       times, tracking, streaks
-    study/        focus timer, subjects, exams, flashcards (SRS)
-    fitness/      workout library and player, water, fasting
-    planner/      rule-based daily planner
-    habits/       calendar, journal
-    insights/     achievements, weekly report, history queries
-    notifications/ reminder planner, service, Android scheduler, settings UI
-    backup/       versioned export and restore
-    sync/         sync engine, remote clients, cloud account service
-    ai/           consent-gated AI client, service and screen
-    settings/     preferences, backup, cloud and privacy sections
-backend/supabase/ SQL migrations, RLS tests, edge functions
-docs/             rules, sync, backend and privacy notes
-test/             automated tests
-tool/             screenshot renderer
+    auth/          profiles, onboarding, recovery verifier, cloud auth client
+    home/          dashboard and daily score
+    prayer/        times, tracking, streaks
+    study/         focus timer, subjects, exams, flashcards (SRS)
+    fitness/       workouts, water, fasting
+    planner/       daily planner
+    habits/        calendar and journal
+    insights/      achievements, weekly report
+    notifications/ reminder planner, service, Android scheduler
+    backup/        export and restore
+    sync/          sync engine and remote clients
+    ai/            optional AI assistant
+    settings/      preferences, backup, cloud, privacy
+backend/supabase/  SQL migrations, database tests, edge functions
+docs/              rules, sync, backend, privacy
+test/              automated tests
+tool/              screenshot renderer and screenshots
 ```
 
-## Honest limitations
+Built with Flutter, Riverpod, go_router and Drift. Design: "Calm Premium
+Wellness" (midnight navy, sage green, warm ivory, soft gold, muted blue).
 
-- Inter is not bundled yet; the UI uses the platform sans-serif (Roboto on Android).
-- Timestamps in the database are stored with one-second resolution.
-- The planner's day window is fixed at 06:00-22:00 and is not yet user-editable.
-- On-device data is not separately encrypted; it relies on Android's app sandbox
-  and device encryption. Cloud traffic uses HTTPS and is **not** end-to-end
-  encrypted.
+## Known limitations
+
+- Inter is not bundled yet; the UI uses the platform sans-serif.
+- Database timestamps have one-second resolution.
+- The planner's day window is fixed at 06:00-22:00.
+- Local data relies on Android's sandbox and device encryption; Nuvora adds no
+  database encryption of its own yet. Cloud traffic uses HTTPS and is **not**
+  end-to-end encrypted. Backup files are not encrypted.
+- Sync is manual ("Sync now"); there is no background sync.
 - Prayer times are calculated and may differ from a local mosque timetable.
   Times are shown in the phone's time zone.
+- Urdu strings exist but the right-to-left layout has not been reviewed on a
+  device.
+- This is not medical, religious or financial advice.
