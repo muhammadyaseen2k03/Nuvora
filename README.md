@@ -73,10 +73,6 @@ it may see; your journal and name are never sent; replies are labelled
 "AI-generated", shown as drafts you review before saving, and a local offline
 suggestion is always available.
 
-## Status: what is verified and what is not
-
-Be aware of the difference between *tested here* and *proven in the field*:
-
 - **Tested with automated tests** (unit, database and widget tests on an
   in-memory database): all core tracking, the algorithms, backup/restore,
   migrations, the sync engine (simulating two devices), the reminder planner and
@@ -90,12 +86,6 @@ Be aware of the difference between *tested here* and *proven in the field*:
   prompt, sharing a backup file, picking a file to restore, and installing the
   APK. A debug APK builds successfully.
 
-**Not built yet** (from the original plan): Qibla compass, Quran reading
-tracker, dhikr/tasbih counter, workout set/rep/weight logging, body
-measurements, linking topics to exams, local app lock, a screen to set the
-local recovery question, dashboard card customisation and editable score
-weights, monthly challenges, streak recovery, fasting reminders, an automatic
-location option, push notifications, iOS, and on-device integration tests.
 
 ## Quick start
 
